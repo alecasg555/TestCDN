@@ -1,0 +1,130 @@
+@{
+    var error = ViewBag?.Error ?? false;
+}
+@if(!error){
+    <html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="~/css/Report.css" />
+    </head>
+    <body>
+        <div>
+            <div style="width:100%;background-color:white;border-bottom:1px solid white;">
+                <div style="text-align:center;display:flex;">
+                    <div> <h2>Wound Evaluation</h2></div>
+                    <div><p>&nbsp; &nbsp;1/2 &nbsp; @ViewBag.Patient.Name[0] &nbsp; MRN: @ViewBag.Patient.Identifier[0].Value &nbsp; SWIFT SKIN AND WOUND</p></div>
+                </div>
+            </div>
+            <hr />
+            <div class="patient-info-container">
+                <div class="patient-info">
+                    <div class="patient" style="width:100%;display:flex;">
+                        <div class="patient-qr-code" style="width:50%;text-align:center;">
+                            <br />
+                            <h4 class="patient-title" style="text-align:center;">Evaluated on Dec 11, 2018 - 11:46</h4>
+                            <br />
+                            <img src="wwwroot/images/qr.jpg" />
+                        </div>
+                        <div style="border-left:1px solid black;">
+                            <h4 style="text-align:right;">@ViewBag.Patient.Name[0]</h4>
+                            <p style="text-align:right;"><b>@ViewBag.Patient.BirthDate , @ViewBag.Patient.Gender</b></p>
+                            <p style="text-align:right;"><b>MRN: @ViewBag.Patient.Identifier[0].Value</b></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div style="width:100%;display:flex">
+                <div class="wound-dimensions-info" style="width:60%;">
+                    <h3>#1 - Pressure - Stage 4</h3>
+                    <p><b>Body Location: Left Buttock</b></p>
+                    <p><b>Resolved - 3 months old</b></p>
+                    <p><b>Present on Admission</b></p>
+                    <p><b>PUSH Score: 0</b></p>
+                    <table class="dimensions-table" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th class="table-header" style="background-color:#0057b8;color:white;" colspan="2">Dimensions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (dynamic quantityComponent in ViewBag.QuantityValues)
+                            {
+                                <tr>
+                                    <td>@quantityComponent.Code.Text</td>
+                                    <td>@quantityComponent.Value.Value @quantityComponent.Value.Unit</td>
+                                </tr>
+                            }
+
+
+                        </tbody>
+                    </table>
+                    <p class="percentage-text">*Negative percentage values indicate wound is getting smaller</p>
+                </div>
+                <div class="wound-image">
+                    <img alt="wound-image" src="wwwroot/images/wound.png" />
+                </div>
+            </div>
+            <div class="wound-dashboard">
+                <div class="graphic-percent-closure"></div>
+                <div class="graphic-push"></div>
+            </div>
+
+            <div class="info-tables">
+                <table class="describe-table" style="width:100%">
+                    <thead class="table-header">
+                        <tr>
+                            <th colspan="2" style="background-color:#0057b8;color:white">Describe</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (dynamic codeableComponent in ViewBag.CodeableConcept)
+                        {
+                            <tr>
+                                <td>@codeableComponent.Code.Text</td>
+                                <td>@codeableComponent.Value.Text</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <table style="width:100%">
+                    <thead class="table-header">
+                        <tr>
+                            <th colspan="2" style="background-color:#0057b8;color:white">Wound Info</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in ViewBag.QuestionnaireResponse.Item)
+                        {
+
+                            <tr>
+                                <td>@item.Text</td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+
+                <table style="width:100%">
+                    <thead class="table-header">
+                        <tr>
+                            <th colspan="2" style="background-color:#0057b8;color:white">PROGRESS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr>
+                            <td>Progress</td>
+                            <td>@ViewBag?.Observation?.Status</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+            </div>
+        </div>
+    </body>
+    </html>
+
+}else{
+    <h1 class="red">@ViewBag?.Message </h1>
+}
